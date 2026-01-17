@@ -16,10 +16,11 @@ public class OpenApiConfig {
         String schemeName = "bearerAuth";
 
         return new OpenAPI()
+                // 서버 목록에 API Gateway 스테이지 경로 추가
+                .addServersItem(new io.swagger.v3.oas.models.servers.Server().url("/clean"))
                 .info(new Info()
                         .title("Sogeun API")
                         .version("v1"))
-                // 전역 보안: 기본은 JWT 필요(자물쇠 기본 적용)
                 .addSecurityItem(new SecurityRequirement().addList(schemeName))
                 .components(new Components()
                         .addSecuritySchemes(schemeName,
