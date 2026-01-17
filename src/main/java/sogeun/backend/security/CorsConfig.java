@@ -15,11 +15,11 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // 프론트 개발/배포 주소들
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",   // React (CRA)
-                "http://localhost:5173",   // Vite + React
-                "http://15.164.164.66:8080" // 현재 백엔드 주소 (선택)
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://15.164.164.66:8080",
+                "https://pruxd7efo3.execute-api.ap-northeast-2.amazonaws.com" // 추가
         ));
 
         config.setAllowedMethods(List.of(
