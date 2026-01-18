@@ -28,11 +28,21 @@ public class SecurityConfig {
                                 "/api/auth/signup",
                                 "/api/auth/login",
                                 "/api/test/**",
+
+                                // swagger (local)
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
+                                "/swagger-ui/index.html",
                                 "/v3/api-docs/**",
+
+                                // swagger (api gateway)
+                                "/clean/swagger-ui.html",
+                                "/clean/swagger-ui/**",
+                                "/clean/swagger-ui/index.html",
                                 "/clean/v3/api-docs/**",
-                                "/error"
+
+                                "/error",
+                                "/"
                         ).permitAll() //토큰 없이도 접근 가능한 포인트
                         .anyRequest().authenticated()
                 )
