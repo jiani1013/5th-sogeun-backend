@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/clean/v3/api-docs/**"
+                                "/clean/v3/api-docs/**",
+                                "/error"
                         ).permitAll() //토큰 없이도 접근 가능한 포인트
                         .anyRequest().authenticated()
                 )
