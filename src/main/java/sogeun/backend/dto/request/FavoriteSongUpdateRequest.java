@@ -1,20 +1,11 @@
 package sogeun.backend.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
+@Getter
 public class FavoriteSongUpdateRequest {
-
-    @NotBlank
+    private String spotifyTrackId;   // 강력 권장 (unique)
     private String title;
-
-    @NotBlank
     private String artistName;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getArtistName() {
-        return artistName;
-    }
+    //private String spotifyArtistId;
 }
