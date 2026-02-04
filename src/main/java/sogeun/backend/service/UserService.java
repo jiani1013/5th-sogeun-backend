@@ -26,8 +26,6 @@ import sogeun.backend.sse.dto.MusicDto;
 
 import java.util.List;
 
-import java.util.List;
-
 
 @Slf4j
 @Service
@@ -40,6 +38,7 @@ public class UserService {
     private final ArtistRepository artistRepository;
     private final SongRepository songRepository;
     private final UserRepository UserRepository;
+
 
 
 
@@ -222,6 +221,9 @@ public class UserService {
                 })
                 .toList();
     }
+
+
+
 
 
 
