@@ -80,7 +80,7 @@ public class LocationService {
                 emitter.send(SseEmitter.event()
                         .name("NEARBY_USER")
                         .data(new NearbyUserEvent(userId)));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 registry.remove(target);
             }
         }
@@ -103,7 +103,7 @@ public class LocationService {
             emitter.send(SseEmitter.event()
                     .name("CONNECT")
                     .data("connected"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             registry.remove(userId);
         }
 
