@@ -37,8 +37,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ArtistRepository artistRepository;
     private final SongRepository songRepository;
-    private final UserRepository UserRepository;
-
 
 
 
