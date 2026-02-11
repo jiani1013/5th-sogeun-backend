@@ -1,4 +1,4 @@
-package sogeun.backend.service;
+package sogeun.backend.sse;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Circle;
@@ -10,8 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.domain.geo.Metrics;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import sogeun.backend.sse.SseEmitterRegistry;
 import sogeun.backend.sse.dto.NearbyUserEvent;
+import sogeun.backend.sse.dto.UserNearbyResponse;
+import org.springframework.data.geo.Point;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,17 +26,13 @@ public class LocationService {
     private final RedisTemplate<String, String> redisTemplate;
     private final SseEmitterRegistry registry;
 
-    // =============================
-    // 위치 저장
-    // =============================
+    //위치 저장
     public void saveLocation(Long userId, double lat, double lon) {
         redisTemplate.opsForGeo()
                 .add(KEY, new Point(lon, lat), userId.toString());
     }
 
-    // =============================
-    // 반경 검색
-    // =============================
+    //반경 검색
     public List<Long> findNearbyUsers(
             Long myId,
             double lat,
@@ -63,9 +60,7 @@ public class LocationService {
                 .toList();
     }
 
-    // =============================
-    // 위치 업데이트 + SSE 알림
-    // =============================
+    //위치 업데이트 + sse 알림
     public void updateAndNotify(Long userId, double lat, double lon) {
 
         saveLocation(userId, lat, lon);
@@ -86,27 +81,41 @@ public class LocationService {
         }
     }
 
-    // =============================
-    // SSE 구독 (에러 원인 해결)
-    // =============================
-    public SseEmitter subscribe(Long userId) {
+//    // =============================
+//    // SSE 구독 (에러 원인 해결)
+//    // =============================
+//    public SseEmitter subscribe(Long userId) {
+//
+//        SseEmitter emitter = new SseEmitter(5 * 60 * 1000L); // 5분
+//
+//        registry.addOrReplace(userId, emitter);
+//
+//        emitter.onCompletion(() -> registry.remove(userId));
+//        emitter.onTimeout(() -> registry.remove(userId));
+//        emitter.onError(e -> registry.remove(userId));
+//
+//        try {
+//            emitter.send(SseEmitter.event()
+//                    .name("CONNECT")
+//                    .data("connected"));
+//        } catch (IOException e) {
+//            registry.remove(userId);
+//        }
+//
+//        return emitter;
+//    }
 
-        SseEmitter emitter = new SseEmitter(5 * 60 * 1000L); // 5분
+    public Point getLocation(Long userId) {
 
-        registry.addOrReplace(userId, emitter);
+        List<Point> positions = redisTemplate.opsForGeo()
+                .position(KEY, userId.toString());
 
-        emitter.onCompletion(() -> registry.remove(userId));
-        emitter.onTimeout(() -> registry.remove(userId));
-        emitter.onError(e -> registry.remove(userId));
-
-        try {
-            emitter.send(SseEmitter.event()
-                    .name("CONNECT")
-                    .data("connected"));
-        } catch (IOException e) {
-            registry.remove(userId);
+        if (positions == null || positions.isEmpty()) {
+            return null;
         }
 
-        return emitter;
+        return positions.get(0); // x = lon, y = lat
     }
+
+
 }
